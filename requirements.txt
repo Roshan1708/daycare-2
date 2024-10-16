@@ -1,0 +1,7 @@
+Flask==2.3.2
+Flask-MySQLdb==1.0.1
+Flask-WTF==1.0.1
+Flask-Mail==0.9.1
+APScheduler==3.9.1.post1
+ReportLab==3.6.12
+mysql-connector-python==8.1.0
