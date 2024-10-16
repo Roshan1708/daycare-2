@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee Structure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF5E1;
+            color: #6C757D;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #E9F5F7;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            color: #6C757D;
+        }
+
+        /* Main Section */
+        .main-container {
+            background-color: #B5EAD7;
+            padding: 40px;
+        }
+
+        .fee-card {
+            background-color: #FFF5E1;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .fee-card h2 {
+            color: #6C757D;
+        }
+
+        .fee-card p {
+            margin: 5px 0;
+        }
+
+        /* Form Section */
+        form {
+            background-color: #FFF5E1;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        form input, form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: #FFB6B9;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #FF8A8D;
+        }
+
+        .btn-secondary {
+            background-color: #C7CEEA;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background-color: #AEBBDF;
+        }
+
+        /* Fee Display Section */
+        #fee-display {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #6C757D;
+        }
+    </style>
+    <script>
+        // Fee structure based on age group and hours
+        const feeRates = {
+            "1.5-2": { "1": 200, "additionalHour": 200, "4": 800, "8": 1600 },
+            "2-3": { "1": 450, "additionalHour": 250, "4": 1200, "8": 2200 },
+            "3-5": { "1": 400, "additionalHour": 200, "4": 1000, "8": 1800 }
+        };
+
+        // Function to calculate and display the fee
+        function calculateFee() {
+            const ageGroup = document.getElementById('age-group').value;
+            const hours = parseInt(document.getElementById('hours').value);
+            let fee = 0;
+
+            if (ageGroup && hours) {
+                const rates = feeRates[ageGroup];
+
+                // Calculate fee based on selected hours
+                if (hours === 1) {
+                    fee = rates["1"]; // First hour
+                } else if (hours === 4) {
+                    fee = rates["4"]; // Flat rate for 4 hours
+                } else if (hours === 8) {
+                    fee = rates["8"]; // Flat rate for 8 hours
+                } else if (hours > 1 && hours < 4) {
+                    fee = rates["1"] + (hours - 1) * rates["additionalHour"]; // First hour + additional hours
+                } else if (hours > 4 && hours < 8) {
+                    fee = rates["4"] + (hours - 4) * rates["additionalHour"]; // 4-hour rate + additional hours
+                }
+
+                document.getElementById('fee-display').innerText = `Total Fee: ${fee} rupees`;
+            } else {
+                document.getElementById('fee-display').innerText = '';
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Day Care Fee Structure & Calculator</h1>
+    </header>
+
+    <!-- Main Content Section -->
+    <div class="main-container">
+
+        <!-- Fee Cards for Age Groups -->
+        <div class="fee-card">
+            <h2>Age Group: 1.5 - 2 Years</h2>
+            <p>First Hour: 200 rupees</p>
+            <p>Each Additional Hour: 200 rupees</p>
+            <p>4 Hours: 800 rupees</p>
+            <p>8 Hours: 1600 rupees</p>
+        </div>
+
+        <div class="fee-card">
+            <h2>Age Group: 2 - 3 Years</h2>
+            <p>First Hour: 450 rupees</p>
+            <p>Each Additional Hour: 250 rupees</p>
+            <p>4 Hours: 1200 rupees</p>
+            <p>8 Hours: 2200 rupees</p>
+        </div>
+
+        <div class="fee-card">
+            <h2>Age Group: 3 - 5 Years</h2>
+            <p>First Hour: 400 rupees</p>
+            <p>Each Additional Hour: 200 rupees</p>
+            <p>4 Hours: 1000 rupees</p>
+            <p>8 Hours: 1800 rupees</p>
+        </div>
+
+        <!-- Fee Calculator Form Section -->
+        <form oninput="calculateFee()">
+            <label for="age-group">Select Age Group</label>
+            <select id="age-group" name="age-group">
+                <option value="">--Select--</option>
+                <option value="1.5-2">1.5 - 2 years</option>
+                <option value="2-3">2 - 3 years</option>
+                <option value="3-5">3 - 5 years</option>
+            </select>
+
+            <label for="hours">Select Number of Hours</label>
+            <select id="hours" name="hours">
+                <option value="">--Select--</option>
+                <option value="1">1 hour</option>
+                <option value="2">2 hours</option>
+                <option value="3">3 hours</option>
+                <option value="4">4 hours</option>
+                <option value="5">5 hours</option>
+                <option value="6">6 hours</option>
+                <option value="7">7 hours</option>
+                <option value="8">8 hours</option>
+            </select>
+
+            <!-- Display Calculated Fee -->
+            <div id="fee-display"></div>
+        </form>
+
+        <!-- Save and Print Fee Summary -->
+        <button class="btn-primary" onclick="saveFeeSummary()">Save Fee Summary</button>
+        <button class="btn-secondary" onclick="printFeeSummary()">Print Fee Summary</button>
+
+    </div>
+
+    <script>
+        // Function to save fee summary
+        function saveFeeSummary() {
+            const ageGroup = document.getElementById('age-group').value;
+            const hours = document.getElementById('hours').value;
+            const fee = document.getElementById('fee-display').innerText;
+
+            const feeSummary = `Age Group: ${ageGroup}\nHours: ${hours}\nFee: ${fee}`;
+
+            // Save fee summary to local storage
+            localStorage.setItem('feeSummary', feeSummary);
+
+            alert('Fee summary saved successfully!');
+        }
+
+        // Function to print fee summary
+        function printFeeSummary() {
+            const feeSummary = localStorage.getItem('feeSummary');
+
+            if (feeSummary) {
+                // Print fee summary
+                const printWindow = window.open('', '', 'height=500,width=800');
+                printWindow.document.write('<pre>' + feeSummary + '</pre>');
+                printWindow.document.close();
+                printWindow.print();
+                printWindow.close();
+            } else {
+                alert('No fee summary saved!');
+            }
+        }
+    </script>
+
+</body>
+</html>
+

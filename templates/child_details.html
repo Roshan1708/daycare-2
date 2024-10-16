@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Details - Day Care Management</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF5E1; /* Cream background */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #B5EAD7; /* Light Green background for the dashboard */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #6C757D; /* Gray text */
+        }
+        .form-group {
+            margin: 15px 0;
+            text-align: center;
+        }
+        label {
+            font-weight: 600;
+            color: #6C757D; /* Gray text */
+        }
+        input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .btn {
+            background-color: #FFB6B9; /* Peach for buttons */
+            color: white;
+            border: none; /* No border */
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: 0.3s;
+            outline: none; /* No outline on focus */
+            box-shadow: none; /* No shadow */
+        }
+        .btn:hover {
+            background-color: #E9F5F7; /* Soft Blue on hover */
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #6C757D; /* Gray border */
+        }
+        th {
+            background-color: #C7CEEA; /* Lavender header */
+            color: #6C757D; /* Gray text */
+        }
+        .message {
+            display: none; /* Initially hidden */
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #C7CEEA; /* Lavender background for messages */
+            color: #6C757D;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .track-status {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 5px; /* Spacing between buttons */
+        }
+    </style>
+
+</head>
+<body>
+    
+    <div class="container">
+        <h2>Child Details</h2>
+
+        <div class="form-group">
+            <label for="search">Search by Child ID or Name:</label>
+            <input type="text" id="search" placeholder="Enter Child ID or Name" onkeyup="filterTable()">
+        </div>
+
+        <table id="childTable">
+            <thead>
+                <tr>
+                    <th>Child ID</th>
+                    <th>Child Name</th>
+                    <th>Child DOB</th>
+                    <th>Child Age</th>
+                    <th>Parent's Contact Number</th>
+                    <th>Parent's Email ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for child in children %}
+                <tr>
+                    <td>{{ child[0] }}</td>
+                    <td>{{ child[1] }}</td>
+                    <td>{{ child[2] }}</td>
+                    <td>{{ child[3] }}</td>
+                    <td>{{ child[4] }}</td>
+                    <td>{{ child[5] }}</td>
+                    <td class="action-buttons">
+                        <a href="{{ url_for('edit_child', child_id=child[0]) }}" class="btn">Edit</a>
+                        <a href="{{ url_for('delete_child', child_id=child[0]) }}" class="btn">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="message" id="actionMessage"></div>
+
+        <div class="track-status">
+            <button class="btn" onclick="redirectTo('/status')">Track Status</button>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            {% if session['role'] == 'parent' %}
+            <a href="{{ url_for('parent_dashboard') }}" class="btn">Back to main page</a>
+            {% elif session['role'] == 'admin' %}
+            <a href="{{ url_for('admin_dashboard') }}" class="btn">Back to main page</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function filterTable() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('childTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                const td1 = tr[i].getElementsByTagName('td')[0]; // Child ID
+                const td2 = tr[i].getElementsByTagName('td')[1]; // Child Name
+                if (td1 || td2) {
+                    const txtValue1 = td1.textContent || td1.innerText;
+                    const txtValue2 = td2.textContent || td2.innerText;
+                    if (txtValue1.toLowerCase().indexOf(filter) > -1 || txtValue2.toLowerCase().indexOf(filter) > -1) {
+                        tr[i].style.display = '';
+                    } else {
+                        tr[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        function editChild(id) {
+            // Logic for editing child details
+            document.getElementById('actionMessage').innerText = `Child ID ${id} details edited successfully!`;
+            document.getElementById('actionMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('actionMessage').style.display = 'none';
+            }, 3000);
+        }
+
+        function deleteChild(id) {
+            // Logic for deleting child details
+            document.getElementById('actionMessage').innerText = `Child ID ${id} deleted successfully!`;
+            document.getElementById('actionMessage').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('actionMessage').style.display = 'none';
+            }, 3000);
+            
+            const row = document.querySelector(`#childTable tr:nth-child(${id + 1})`);
+            if (row) {
+                row.remove();
+            }
+        }
+
+        function redirectTo(page) {
+            window.location.href = page; // Redirects to the specified page
+        }
+    </script>
+
+    
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Attendance Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF5E1; /* Cream background for light areas */
+            margin: 0;
+            padding: 20px;
+            color: #6C757D; /* Gray text for readability */
+        }
+
+        h1 {
+            color: black; /* Soft Blue for header */
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .chart-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #B5EAD7; /* Light Green for card background */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            max-width: 100%;
+            height: 600px;
+            margin: 20px auto;
+            display: block;
+            border-radius: 10px;
+        }
+
+        button {
+            background-color: #FFB6B9; /* Peach for buttons */
+            border: none;
+            border-radius: 20px;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #C7CEEA; /* Lavender for hover effect */
+        }
+
+        .card {
+            background-color: #B5EAD7; /* Light Green for cards */
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 14px;
+            color: #6C757D; /* Gray text */
+        }
+    </style>
+</head>
+<body>
+    <h1>Child Attendance Analytics</h1>
+    <div class="chart-container">
+        <canvas id="analyticsChart"></canvas>
+    </div>
+    <script>
+        const ctx = document.getElementById('analyticsChart').getContext('2d');
+        const attendanceData = {{ attendanceData | tojson }};
+        const colors = {
+            'present': 'rgba(75, 192, 192, 0.6)',  // Soft Blue for present
+            'absent': 'rgba(255, 99, 132, 0.6)'   // Peach for absent
+        };
+
+        // Group data by childId and attendance status
+        const chartData = {};
+        attendanceData.forEach((row, index) => {
+            const childId = row.childId;
+            const date = row.currentDate;
+            const status = row.attendance;
+            const hours = row.totalHours;
+
+            if (!chartData[childId]) {
+                chartData[childId] = { dates: [], present: [], absent: [] };
+            }
+
+            chartData[childId].dates.push(date);
+
+            if (status === 'present') {
+                chartData[childId].present.push(hours);
+                chartData[childId].absent.push(null); // Push null for gaps in absent data
+            } else {
+                chartData[childId].present.push(null); // Push null for gaps in present data
+                chartData[childId].absent.push(hours);
+            }
+        });
+
+        // Prepare datasets for the chart
+        const datasets = [];
+
+        Object.keys(chartData).forEach(childId => {
+            const childData = chartData[childId];
+
+            // Add present dataset
+            datasets.push({
+                label: `Child ID: ${childId} - Present`,
+                data: childData.present,
+                backgroundColor: colors.present,
+                borderColor: colors.present,
+                borderWidth: 1,
+                fill: true // Fill area under the line for present
+            });
+
+            // Add absent dataset
+            datasets.push({
+                label: `Child ID: ${childId} - Absent`,
+                data: childData.absent,
+                backgroundColor: colors.absent,
+                borderColor: colors.absent,
+                borderWidth: 1,
+                fill: true // Fill area under the line for absent
+            });
+        });
+
+        // Create the chart
+        const analyticsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.values(chartData)[0].dates, // The dates as labels
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Total Hours'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Dates'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `Total Hours: ${tooltipItem.raw}`; // Show total hours
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

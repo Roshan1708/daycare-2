@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babysitter Details - Day Care Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF5E1;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #B5EAD7;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #6C757D;
+        }
+
+        .btn {
+            background-color: #FFB6B9;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: 0.3s;
+            outline: none;
+        }
+
+        .btn:hover {
+            background-color: #E9F5F7;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #6C757D;
+        }
+
+        th {
+            background-color: #C7CEEA;
+            color: #6C757D;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .message {
+            display: none;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #C7CEEA;
+            color: #6C757D;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .add-details {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Babysitter Details</h2>
+
+        <div class="add-details">
+            <a href="/add_babysitter" class="btn">Add Babysitter</a>
+        </div>
+
+        <div class="form-group">
+            <label for="search">Search by Babysitter ID or Name:</label>
+            <input type="text" id="search" placeholder="Enter Babysitter ID or Name" onkeyup="filterTable()">
+        </div>
+
+        {% if session['role'] == 'parent' or session['role'] == 'admin' %}
+        <table id="babysitterTable">
+            <thead>
+                <tr>
+                    <th>Babysitter ID</th>
+                    <th>Babysitter Name</th>
+                    <th>Contact Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for babysitter in babysitters %}
+                <tr id="row-{{ babysitter[0] }}">
+                    <td>{{ babysitter[0] }}</td>
+                    <td>{{ babysitter[1] }}</td>
+                    <td>{{ babysitter[2] }}</td>
+                    <td class="action-buttons">
+                        <a href="{{ url_for('edit_babysitter', babysitter_id=babysitter[0]) }}" class="btn">Edit</a>
+                        <a href="{{ url_for('delete_babysitter', babysitter_id=babysitter[0]) }}" class="btn">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        <div class="message" id="actionMessage"></div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            {% if session['role'] == 'parent' %}
+            <a href="{{ url_for('parent_dashboard') }}" class="btn">Back to main page</a>
+            {% elif session ['role'] == 'admin' %}
+            <a href="{{ url_for('admin_dashboard') }}" class="btn">Back to main page</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function filterTable() {
+            const input = document.getElementById('search').value.toLowerCase();
+            const rows = document.querySelectorAll('#babysitterTable tbody tr');
+            
+            rows.forEach(row => {
+                const id = row.querySelector('td:nth-child(1)').innerText.toLowerCase();
+                const name = row.querySelector('td:nth-child(2)').innerText.toLowerCase();
+                row.style.display = id.includes(input) || name.includes(input) ? '' : 'none';
+            });
+        }
+    
+        function editBabysitter(id) {
+            // Redirect to the edit babysitter page
+            window.location.href = `/edit_babysitter/${id}`;
+        }
+    
+        function deleteBabysitter(id) {
+            if (confirm("Are you sure you want to delete this babysitter?")) {
+                console.log(`Attempting to delete babysitter ID: ${id}`);  // Log the ID being deleted
+                fetch(`/delete_babysitter/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log(`Response status: ${response.status}`);  // Log the response status
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(`Delete response data:`, data);  // Log the data returned from the server
+                    if (data.success) {
+                        document.getElementById(`row-${id}`).remove();  // Remove row from table
+                        showMessage(data.message);
+                    } else {
+                        showMessage(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        }
+        
+    
+        function showMessage(message) {
+            const actionMessage = document.getElementById('actionMessage');
+            actionMessage.innerText = message;
+            actionMessage.style.display = 'block';
+            setTimeout(() => {
+                actionMessage.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+    
+</body>
+
+</html>

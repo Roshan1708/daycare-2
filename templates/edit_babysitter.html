@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Babysitter - Day Care Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF5E1;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #B5EAD7;
+            border-radius: 10px;
+        }
+        .btn {
+            background-color: #FFB6B9;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Edit Babysitter</h2>
+        <form action="{{ url_for('edit_babysitter', babysitter_id=babysitter[0]) }}" method="POST">
+
+            <div class="form-group">
+                <label for="name">Babysitter Name:</label>
+                <input type="text" id="name" name="name" value="{{ babysitter[1] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="contact_number">Contact Number:</label>
+                <input type="text" id="contact_number" name="contact_number" value="{{ babysitter[2] }}" required>
+            </div>
+            <button type="submit" class="btn">Update Babysitter</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day Care Management System</title>
+    <style>
+        body {
+            background: url('static/daycare.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Poppins', sans-serif;
+            color: #6C757D;
+            text-align: center;
+            padding: 50px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px #f0f0f0; /* Add a subtle text shadow */
+        }
+
+        a {
+            display: inline-block;
+            margin: 15px;
+            padding: 15px 30px; /* Reduced padding */
+            font-size: 1.2em; /* Reduced font size */
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #FF99A0;
+            color: #fff;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .primary-button {
+            background-color: #FF7F82;
+            color: #fff;
+        }
+
+        .secondary-button {
+            background-color: #B3E5E2;
+            color: #fff;
+        }
+
+        .secondary-button:hover {
+             background-color: #FF7F8A; /* Changed hover color to match the background image */
+            color: white;
+        }
+
+        /* Add rounded icons for buttons */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .icon-button {
+            background-color: #FFB6B9;
+            border-radius: 50%;
+            padding: 15px; /* Reduced padding */
+            width: 50px; /* Reduced width */
+            height: 50px; /* Reduced height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em; /* Reduced font size */
+            color: #fff;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .icon-button:hover {
+            background-color: #FF99A0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            h2 {
+                font-size: 2em;
+            }
+            a {
+                font-size: 1em;
+                padding: 10px 20px;
+            }
+            .icon-button {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Welcome to Day Care Management System</h2>
+
+    <div class="button-container">
+        <a href="/login" class="primary-button">Login</a>
+        <a href="/register" class="secondary-button">Register</a>
+    </div>
+
+    
+</body>
+</html>

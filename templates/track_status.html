@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Status - Day Care Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF5E1; /* Cream background */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #B5EAD7; /* Light Green background */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #6C757D; /* Gray text */
+        }
+        .btn {
+            background-color: #FFB6B9; /* Peach buttons */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+            outline: none;
+        }
+        .btn:hover {
+            background-color: #E9F5F7; /* Soft Blue on hover */
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #6C757D; /* Gray border */
+        }
+        th {
+            background-color: #C7CEEA; /* Lavender header */
+            color: #6C757D;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .message {
+            display: none;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #C7CEEA;
+            color: #6C757D;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .add-status {
+            margin-bottom: 20px;
+        }
+        .search-input {
+            width: 70%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        /* New style for Back button */
+        .back-btn-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Track Status</h2>
+        
+        <div class="add-status">
+            <button class="btn" onclick="window.location.href='{{ url_for('track_status') }}'">Add Status</button>
+        </div>
+
+        <div class="form-group">
+            <label for="search">Search by Child ID or Babysitter ID:</label>
+            <input type="text" id="search" class="search-input" placeholder="Enter Child ID or Babysitter ID" onkeyup="filterTable()">
+        </div>
+
+        <table id="statusTable">
+            <thead>
+                <tr>
+                    <th>Status ID</th>
+                    <th>Child ID</th>
+                    <th>Babysitter ID</th>
+                    <th>Current Date</th>
+                    <th>In Time</th>
+                    <th>Out Time</th>
+                    <th>Total Hours</th>
+                    <th>Fees to be Paid</th>
+                    <th>Fees Status</th>
+                    <th>Attendance</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for status in status %}
+                <tr>
+                    <td>{{ status[0] }}</td>
+                    <td>{{ status[1] }}</td>
+                    <td>{{ status[2] }}</td>
+                    <td>{{ status[3] }}</td>
+                    <td>{{ status[4] }}</td>
+                    <td>{{ status[5] }}</td>
+                    <td>{{ status[6] }}</td>
+                    <td>{{ status[7] }}</td>
+                    <td>{{ status[8] }}</td>
+                    <td>{{ status[9] }}</td>
+                    <td class="action-buttons">
+                        <a href="{{ url_for('edit_status', id=status[0]) }}" class="btn">Edit</a>
+                        <a href="{{ url_for('delete_status', id=status[0]) }}" class="btn">Delete</a>
+                        
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="message" id="actionMessage"></div>
+
+        <!-- Back button container -->
+        <div class="back-btn-container">
+            <button class="btn" onclick="window.location.href='{{ url_for('child_details') }}'">Back to Child details page</button>
+            <button class="btn" onclick="window.location.href='{{ url_for('analytics') }}'">View analytics</button>
+        </div>
+    </div>
+
+    <script>
+        function filterTable() {
+            const searchInput = document.getElementById('search').value.toLowerCase();
+            const tableRows = document.getElementById('statusTable').rows;
+            for (let i = 1; i < tableRows.length; i++) {
+                const row = tableRows[i];
+                const childId = row.cells[1].textContent.toLowerCase();
+                const babysitterId = row.cells[2].textContent.toLowerCase();
+                if (childId.includes(searchInput) || babysitterId.includes(searchInput)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+        
+    </script>
+</body>
+</html>

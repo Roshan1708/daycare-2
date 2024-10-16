@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Common dashboard-Day care management system</title>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0; 
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            background-color: #FFF5E1; 
+            color: #1D3557; 
+        }
+
+
+        h1, h2 {
+            color: #1D3557; /* Dark Teal for headings */
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #6C757D; /* Gray for regular text */
+        }
+
+        /* Header Styling */
+        .header {
+            background-color: #FFF5E1; /* Soft Teal Header */
+            padding: 20px; 
+            display: flex; /* Flexbox to align items */
+            align-items: center; /* Vertically align items */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header img {
+            width: 150px; /* Logo size */
+            height: auto;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: black;
+            margin-left: 20px; /* Add margin to push the title slightly */
+        }
+
+        nav {
+            margin-left: auto; /* Push the nav to the right */
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex; /* Display inline items in a row */
+        }
+
+        nav ul li {
+            margin: 0 10px; /* Reduce spacing between items */
+        }
+
+        nav ul li a {
+            color: #1D3557;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 20px; /* Increase clickable area */
+        }
+
+        nav ul li a:hover {
+            background-color: #FFB6B9; /* Add hover effect */
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: #E9F5F1; /* Soft Teal background matching header */
+            color: #E9F5F1; /* Dark Teal text for better contrast */
+            padding: 40px 0; /* Reduce padding here to minimize gap */
+            text-align: center;
+        }
+
+        .hero .btn {
+            background-color: #FFB6B9; /* Peach Button */
+            color: #FFF5E1; /* Cream text on Peach */
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .hero .btn:hover {
+            background-color: #FF9A9C; /* Slightly darker Peach */
+        }
+
+        /* Content Section */
+        .content {
+            display: flex;
+            justify-content: space-around;
+            padding: 40px;
+            background-color: #FFF5E1; /* Light Cream Background */
+        }
+
+        .card {
+            background-color: #E9F5F1; /* Pale Mint Card Background */
+            padding: 20px;
+            border-radius: 15px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            text-align: center;
+        }
+
+        .card h2 {
+            color: #1D3557; /* Dark Teal for card titles */
+            margin-bottom: 10px;
+        }
+
+        /* Primary Button (Peach) */
+        .primary-btn {
+            background-color: #FFB6B9; /* Peach Button */
+            color: #FFF5E1; /* Cream text on Peach */
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px; /* Rounded for inviting appearance */
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .primary-btn:hover {
+            background-color: #FF9A9C; /* Slightly darker Peach on hover */
+        }
+
+        /* Footer Styling */
+        .footer {
+            background-color: #E9F5F1; /* Soft Teal Footer */
+            color: #FFF5E1; /* Cream text for contrast */
+            padding: 20px;
+            text-align: center;
+            margin-top:  40px;
+        }
+
+        /* Map Section */
+        .map-container {
+            margin: 40px 0; /* Margin for map section */
+            text-align: center; /* Center align the map */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: 90%;
+                margin-bottom: 20px;
+            }
+
+            iframe {
+                width: 100%; /* Full width for smaller screens */
+                height: 300px; /* Adjust height for smaller screens */
+            }
+        }
+
+        .quick-links {
+            background-color: #F9F9F9; /* Light background for the section */
+            padding: 40px 20px; /* Padding for top/bottom and sides */
+            text-align: center; /* Center text */
+        }
+        
+        .quick-links h2 {
+            color: #1D3557; /* Dark Teal for the title */
+            margin-bottom: 20px; /* Space below the title */
+        }
+        
+        .links {
+            display: flex; /* Display links in a row */
+            justify-content: center; /* Center the columns */
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+        }
+        
+        .link-column {
+            margin: 0 20px; /* Space between columns */
+        }
+        
+        .link-column a {
+            color: #6C757D; /* Gray for links */
+            text-decoration: none; /* Remove underline */
+            display: block; /* Each link as a block */
+            margin: 8px 0; /* Space between links */
+            transition: color 0.3s; /* Smooth color transition */
+        }
+        
+        .link-column a:hover {
+            color: #FF6F61; /* Change color on hover */
+        }
+        /* Sidebar styling to make it fixed */
+        .sidebar {
+            position: fixed; /* Makes the sidebar fixed in place */
+            bottom: 20px; /* Positions it near the bottom of the page */
+            right: 20px; /* Aligns it to the right side of the page */
+            z-index: 1000; /* Ensures it stays on top of other elements */
+        }
+
+        /* WhatsApp button styling */
+        /* WhatsApp button styling with reduced size */
+        .whatsapp-button {
+            display: flex;
+            align-items: center;
+            background-color: #E9F5F1;
+            color: black;
+            padding: 5px 10px; /* Reduces padding for smaller size */
+            border-radius: 10px;
+            height: fit-content;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px; /* Reduces the font size */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Adds shadow for better visibility */
+        }
+
+        .whatsapp-button img {
+            width: 24px; /* Reduces the size of the WhatsApp icon */
+            margin-right: 5px; /* Reduces space between the icon and the text */
+        }
+
+        .whatsapp-button:hover {
+            background-color: #128C7E;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="{{ url_for('static', filename='logo-no-background.png') }}" alt="Day care logo">
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Programs</a></li>
+                <li><a href="{{ url_for('fee_summary') }}" target="_blank">Fee Structure</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                
+            </ul>
+        </nav>
+    </header>
+
+    <div class="sidebar">
+        <a href="https://wa.me/8838815424" target="_blank" class="whatsapp-button">
+            <img src="https://img.icons8.com/color/48/000000/whatsapp.png" alt="WhatsApp Chat" />
+            Chat with us on WhatsApp
+        </a>
+    </div>
+
+    <main>
+        <section class="hero">
+            <h2>“👣Children are not things to be molded, but are people to be unfolded👣”</h2>
+            <h2>🌹Welcome to Enfant Day Care🌹</h2>
+            <p>Your trusted partner in childcare.</p>
+            <a href="#" class="btn">Join us</a>
+        </section>
+
+        <section class="content">
+            <div class="card">
+                <h2>Child Details</h2>
+                <p>View your child details: </p >
+                <a href="/child_details" target="_blank" class="btn" style="background-color: #FFB6B9; color: #FFF5E1; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer;">View Details</a>
+            </div>
+
+            <div class="card">
+                <h2>Track Status</h2>
+                <p>Check in/out time for your child.</p>
+                <a href="/status" target="_blank" class="btn" style="background-color: #FFB6B9; color: #FFF5E1; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer;">Track Status</a>
+            </div>
+
+            <div class="card">
+                <h2>Babysitter Details</h2>
+                <p>Assigned Babysitter: </p>
+                <a href="/babysitter_details" target="_blank" class="btn" style="background-color: #FFB6B9; color: #FFF5E1; padding: 10px 20px; border: none; border-radius: 25px; cursor: pointer;">View Babysitter Details</a>
+            </div>
+        </section>
+
+        <!-- Map Integration -->
+        <section class="map-container">
+            <h2>Our Location</h2>
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31098.015408800195!2d80.18414321083985!3d13.01962270000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5267104b1407eb%3A0xd23f046151c5295c!2sScribbles!5e0!3m2!1sen!2sin!4v1727759021843!5m2!1sen!2sin" 
+                width="450" 
+                height="350" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </section>
+        
+    </main>
+
+    <section class="quick-links">
+        <h2>Quick Links</h2>
+        <div class="links">
+            <div class="link-column">
+                <a href="#">About Us</a>
+                <a href="fee_summary.html">Fee Structure</a>
+                <a href="#">Contact</a>
+                <a href="#">Admissions</a>
+                <a href="#">Locate a Centre</a>
+            </div>
+            <div class="link-column">
+                <a href="#">Join Us</a>
+                <a href="#">Team Enfant</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Pricing Policy</a>
+                <a href="#">FAQs</a>
+
+            </div>
+            <div class="link-column">
+                <a href="#">Careers</a>
+                <a href="#">Terms And Conditions</a>
+                <a href="#">Refund Policy</a>
+                
+            </div>
+        </div>
+        <div class="social-media">
+            <h3>Follow Us</h3>
+            <a href="#"><img src="https://img.icons8.com/color/48/000000/facebook-new.png" alt="Facebook"/></a>
+            <a href="https://www.instagram.com/nrkr1708"><img src="https://img.icons8.com/color/48/000000/instagram-new.png" alt="Instagram"/></a>
+            <a href="#"><img src="https://img.icons8.com/color/48/000000/linkedin.png" alt="LinkedIn"/></a>
+            <a href="#"><img src="https://img.icons8.com/color/48/000000/youtube-play.png" alt="YouTube"/></a>
+            <a href="#"><img src="https://img.icons8.com/color/48/000000/twitter.png" alt="Twitter"/></a>
+        </div>
+    </section>
+    
+
+    <footer class="footer">
+        <p>&copy; 2024 Day Care Management System</p>
+        <p>Contact us at info@daycare.com</p>
+    </footer>
+    
+</body>
+</html>
